@@ -27,12 +27,12 @@ def laplace(grid):
                     # print("xm,ym,mask,grid,val,total",xm,ym,mask[xm][ym],grid[x+xm][y+ym],mask[xm][ym]*grid[x+xm][y+ym],value)
             resultline.append(value)
         # resultline.insert(0,resultline[0])
-        resultline.insert(0,0)
+        resultline.insert(0,-0.5)
         # resultline.append(value)
-        resultline.append(0)
+        resultline.append(-0.5)
         result.append(resultline)
-    result.insert(0,[0 for i in range(sizeY)])
-    result.append([0 for i in range(sizeY)])
+    result.insert(0,[-0.5 for i in range(sizeY)])
+    result.append([-0.5 for i in range(sizeY)])
     return result
 
 
