@@ -9,7 +9,8 @@ random.seed()
 
 
 def laplace(grid):
-    # returns the second order derivative of the grid. The border is treated by copying the result at the position one pixel away from the border to the outer pixels.
+    # input:  any two dimensional array
+    # output: returns the second order derivative of the grid. The border is treated by copying the result at the position one pixel away from the border to the outer pixels.
     sizeX, sizeY = len(grid), len(grid[0])
     if sizeX < 3 or sizeY < 3:
         raise Exception('Array is too small to calculate the second derivative')
@@ -24,11 +25,8 @@ def laplace(grid):
             for xm in range(-1,2):
                 for ym in range(-1,2):
                     value += mask[xm+1][ym+1]*grid[x+xm][y+ym]
-                    # print("xm,ym,mask,grid,val,total",xm,ym,mask[xm][ym],grid[x+xm][y+ym],mask[xm][ym]*grid[x+xm][y+ym],value)
             resultline.append(value)
-        # resultline.insert(0,resultline[0])
         resultline.insert(0,-0.5)
-        # resultline.append(value)
         resultline.append(-0.5)
         result.append(resultline)
     result.insert(0,[-0.5 for i in range(sizeY)])
@@ -39,6 +37,10 @@ def laplace(grid):
 
 
 def diffusionTimestep(Conc, DA, DB, feed, kill, dt):
+    # calculate the concentration one timestep later based on the diffusion and addition of substances
+    # input : Concentration in the current timestep, diffusion coefficients for both substances, feedrate
+    #         killrate and time step size
+    # output: returns the new concentrations 
     sizeX, sizeY = len(Conc[0]), len(Conc[0][0])
     newconcentration = [[[0 for y in range(sizeY)] for x in range(sizeX)] for i in range(2)]
     secDer = [laplace(Conc[0]), laplace(Conc[1])]
@@ -70,14 +72,21 @@ def diffusionTimestep(Conc, DA, DB, feed, kill, dt):
 
 
 def addConcentration(Concentrations, color, scalefactor):
+    # Changes the concentrations based on user input
+    # input : current concentrations, type of substance to be added, scale of the window
+    # output: none
     mov = pygame.mouse.get_rel()
     pos = pygame.mouse.get_pos()
     
     maxm = max(mov)
     if maxm == 0:
         return
-        
+    
     sizeX, sizeY = len(Concentrations[0]), len(Concentrations[0][0])
+    
+    if maxm > 0.1 * sizeX * scalefactor:
+        return
+        
     if pos[0] >= sizeX * scalefactor or pos[1]  >= sizeY * scalefactor:
         return
     if pos[0]+mov[0] >= sizeX * scalefactor or pos[1] + mov[1] >= sizeY * scalefactor:
@@ -141,11 +150,13 @@ def main():
         for keystroke in pygame.event.get():
             if keystroke.type == pygame.MOUSEBUTTONDOWN:
                 if keystroke.button == 1:       # left mousebutton
-                    paint = not paint
+                    paint = True
                     color = 0
                 if keystroke.button == 3:       # right mousebutton
-                    paint = not paint
+                    paint = True
                     color = 1
+            if keystroke.type == pygame.MOUSEBUTTONUP:
+                paint = False
             if keystroke.type == pygame.QUIT:
                 running = False
             if keystroke.type == pygame.KEYDOWN:
@@ -159,7 +170,6 @@ def main():
         if simulate:
             print("updatestep", step)
             step += 1
-            #time.sleep(0.01)
             Concentrations = diffusionTimestep(Concentrations, DA, DB, feed, kill, dt)
             window.update(Concentrations)
         
