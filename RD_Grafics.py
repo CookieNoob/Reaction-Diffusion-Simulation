@@ -15,5 +15,5 @@ class display:
     def update(self, grid):
         for x in range(self.sizeX):
             for y in range(self.sizeY):
-                pygame.draw.rect(self.window, (0, int(178*grid[0][x][y]), int(220*grid[1][x][y])), (self.scalefactor*x, self.scalefactor*y, self.scalefactor, self.scalefactor), 0) # surface, color, position and size, fillmode
+                pygame.draw.rect(self.window, (int(60*grid[1][x][y]), int(255*grid[1][x][y]), int(255*grid[1][x][y])), (self.scalefactor*x, self.scalefactor*y, self.scalefactor, self.scalefactor), 0) # surface, color, position and size, fillmode
         pygame.display.update()

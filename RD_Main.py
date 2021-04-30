@@ -104,17 +104,27 @@ def addConcentration(Concentrations, color, scalefactor):
 
 
 def main():
-    sizeX, sizeY    = 80   , 80
+    sizeX, sizeY    = 100   , 100
     DA, DB          = 1.0   , 0.5
-    feed, kill      = 0.055 , 0.062
+    # feed, kill      = 0.045 , 0.062 # standard value
+    feed, kill      = 0.0545, 0.062 # coral
     dt              = 1.0
     scalefactor     = 3
     
     SubstanceA = [[1 for y in range(sizeY)] for x in range(sizeX)] 
     SubstanceB = [[0 for y in range(sizeY)] for x in range(sizeX)] 
 
-    for x in range(int(9*sizeX/20), int(11*sizeX/20)):
-        for y in range(int(9*sizeY/20), int(11*sizeY/20)):
+    for x in range(int(8*sizeX/20), int(12*sizeX/20)):
+        for y in range(int(8*sizeY/20), int(12*sizeY/20)):
+            SubstanceB[x][y] = 1
+    for x in range(int(4*sizeX/20), int(5*sizeX/20)):
+        for y in range(int(5*sizeY/20), int(6*sizeY/20)):
+            SubstanceB[x][y] = 1
+    for x in range(int(4*sizeX/20), int(5*sizeX/20)):
+        for y in range(int(8*sizeY/20), int(9*sizeY/20)):
+            SubstanceB[x][y] = 1
+    for x in range(int(4*sizeX/20), int(5*sizeX/20)):
+        for y in range(int(14*sizeY/20), int(16*sizeY/20)):
             SubstanceB[x][y] = 1
             
     Concentrations = []
